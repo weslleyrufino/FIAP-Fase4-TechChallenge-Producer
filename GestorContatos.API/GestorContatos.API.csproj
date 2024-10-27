@@ -11,7 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\GestorContatos.Core\GestorContatos.Core.csproj" />
+    <ProjectReference Include="..\GestorContatos.Infrastructure\GestorContatos.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
