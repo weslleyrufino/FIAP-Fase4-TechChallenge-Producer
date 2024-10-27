@@ -1,4 +1,12 @@
+using GestorContatos.Core.Interfaces.Repository;
+using GestorContatos.Core.Interfaces.Services;
+using GestorContatos.Core.Services;
+using GestorContatos.Infrastructure.Persistence;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<IContatoRepository, ContatoRepository>();
+builder.Services.AddScoped<IContatoService, ContatoService>();
 
 // Add services to the container.
 
