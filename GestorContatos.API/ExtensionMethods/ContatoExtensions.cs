@@ -12,7 +12,13 @@ public static class ContatoExtensions
             Id = viewModel.Id,
             Email = viewModel.Email,
             Nome = viewModel.Nome,
-            Telefone = viewModel.Telefone
+            Telefone = viewModel.Telefone,
+            Regiao = new RegiaoModel()
+            {
+                Id = viewModel.Regiao.Id,
+                DDD = viewModel.Regiao.DDD,
+                Nome = viewModel.Regiao.Nome
+            }
         };
     }
 
@@ -23,7 +29,13 @@ public static class ContatoExtensions
             Id = model.Id,
             Email = model.Email,
             Nome = model.Nome,
-            Telefone = model.Telefone
+            Telefone = model.Telefone,
+            Regiao = new RegiaoViewModel()
+            {
+                Id = model.Regiao.Id,
+                DDD = model.Regiao.DDD,
+                Nome = model.Regiao.Nome
+            }
         };
     }
 

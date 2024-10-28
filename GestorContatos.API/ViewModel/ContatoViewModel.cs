@@ -1,10 +1,12 @@
-﻿namespace GestorContatos.API.ViewModel;
+﻿using GestorContatos.API.ViewModel.Base;
 
-public class ContatoViewModel
+namespace GestorContatos.API.ViewModel;
+
+public class ContatoViewModel : ViewModelBase
 {
     // TODO: Implementar data annotation
-    public int Id { get; set; }
-    public string? Nome { get; set; }
-    public string? Telefone { get; set; }
-    public string? Email { get; set; }
+    public string Telefone { get; set; }
+    public string Email { get; set; }
+    public int RegiaoId { get; set; }
+    public RegiaoViewModel Regiao { get; set; }
 }
