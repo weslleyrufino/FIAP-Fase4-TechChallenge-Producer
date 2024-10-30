@@ -16,14 +16,15 @@ namespace GestorContatos.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("GestorContatos.Core.Entities.ContatoModel", b =>
+            modelBuilder.Entity("GestorContatos.Core.Entities.Contato", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INT");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
@@ -46,11 +47,6 @@ namespace GestorContatos.Infrastructure.Migrations
                         .HasColumnType("VARCHAR(20)")
                         .HasColumnName("Telefone");
 
-                    b.Property<string>("TesteMigration")
-                        .IsRequired()
-                        .HasColumnType("VARCHAR(100)")
-                        .HasColumnName("TesteMigration");
-
                     b.HasKey("Id");
 
                     b.HasIndex("RegiaoId");
@@ -58,7 +54,7 @@ namespace GestorContatos.Infrastructure.Migrations
                     b.ToTable("Contatos", (string)null);
                 });
 
-            modelBuilder.Entity("GestorContatos.Core.Entities.RegiaoModel", b =>
+            modelBuilder.Entity("GestorContatos.Core.Entities.Regiao", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -66,9 +62,8 @@ namespace GestorContatos.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("DDD")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("DDD")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -76,12 +71,12 @@ namespace GestorContatos.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RegiaoModel");
+                    b.ToTable("Regiao");
                 });
 
-            modelBuilder.Entity("GestorContatos.Core.Entities.ContatoModel", b =>
+            modelBuilder.Entity("GestorContatos.Core.Entities.Contato", b =>
                 {
-                    b.HasOne("GestorContatos.Core.Entities.RegiaoModel", "Regiao")
+                    b.HasOne("GestorContatos.Core.Entities.Regiao", "Regiao")
                         .WithMany()
                         .HasForeignKey("RegiaoId")
                         .OnDelete(DeleteBehavior.Restrict)

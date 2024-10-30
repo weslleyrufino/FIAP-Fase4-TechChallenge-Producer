@@ -14,27 +14,23 @@ public class ContatoService : IContatoService
 
     public void DeleteContato(int id)
     {
-        _contatoRepository.DeleteContato(id);
+        _contatoRepository.Deletar(id);
     }
 
-    public IEnumerable<ContatoModel> GetContatos()
+    public IEnumerable<Contato> GetContatos() 
+        => _contatoRepository.GetTodosContatosMesclandoComDDD();
+
+    public IEnumerable<Contato> GetContatosPorDDD(int ddd) 
+        => _contatoRepository.GetContatosPorDDD(ddd);
+
+    public void PostInserirContato(Contato contato)
     {
-        return _contatoRepository.GetContatos();
+        _contatoRepository.Cadastrar(contato);
     }
 
-    public ContatoModel? GetContatosPorDDD(int ddd)
+    public void PutAlterarContato(Contato contato)
     {
-        return _contatoRepository.GetContatosPorDDD(ddd);
-    }
-
-    public ContatoModel PostInserirContato(ContatoModel contato)
-    {
-        return _contatoRepository.PostInserirContato(contato);
-    }
-
-    public void PutAlterarContato(int id, ContatoModel contato)
-    {
-        _contatoRepository.PutAlterarContato(id, contato);
+        _contatoRepository.Alterar(contato);
     }
 
 }

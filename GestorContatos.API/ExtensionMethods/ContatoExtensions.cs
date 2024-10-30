@@ -5,15 +5,16 @@ namespace GestorContatos.API.ExtensionMethods;
 
 public static class ContatoExtensions
 {
-    public static ContatoModel ToModel(this ContatoViewModel viewModel)
+    public static Contato ToModel(this ContatoViewModel viewModel)
     {
-        return new ContatoModel
+        return new Contato
         {
             Id = viewModel.Id,
             Email = viewModel.Email,
             Nome = viewModel.Nome,
             Telefone = viewModel.Telefone,
-            Regiao = new RegiaoModel()
+            RegiaoId = viewModel.RegiaoId,
+            Regiao = new Regiao()
             {
                 Id = viewModel.Regiao.Id,
                 DDD = viewModel.Regiao.DDD,
@@ -22,7 +23,30 @@ public static class ContatoExtensions
         };
     }
 
-    public static ContatoViewModel ToViewModel(this ContatoModel model)
+    public static Contato ToModel(this CreateContatoViewModel createViewModel)
+    {
+        return new Contato
+        {
+            Email = createViewModel.Email,
+            Nome = createViewModel.Nome,
+            Telefone = createViewModel.Telefone,
+            RegiaoId = createViewModel.RegiaoId
+        };
+    }
+
+    public static Contato ToModel(this UpdateContatoViewModel createViewModel)
+    {
+        return new Contato
+        {
+            Id = createViewModel.Id,
+            Email = createViewModel.Email,
+            Nome = createViewModel.Nome,
+            Telefone = createViewModel.Telefone,
+            RegiaoId = createViewModel.RegiaoId
+        };
+    }
+
+    public static ContatoViewModel ToViewModel(this Contato model)
     {
         return new ContatoViewModel
         {
@@ -30,6 +54,7 @@ public static class ContatoExtensions
             Email = model.Email,
             Nome = model.Nome,
             Telefone = model.Telefone,
+            RegiaoId = model.RegiaoId,
             Regiao = new RegiaoViewModel()
             {
                 Id = model.Regiao.Id,
@@ -39,7 +64,7 @@ public static class ContatoExtensions
         };
     }
 
-    public static IEnumerable<ContatoViewModel> ToViewModel(this IEnumerable<ContatoModel> model)
+    public static IEnumerable<ContatoViewModel> ToViewModel(this IEnumerable<Contato> model)
         => model.Select(model => model.ToViewModel());
 
 }

@@ -15,43 +15,72 @@ public class ContatoController : ControllerBase
         _contatoService = contatoService;
     }
 
-    // GET: api/<ContatoController>
     [HttpGet]
     public IActionResult Get()
     {
-        return Ok(_contatoService.GetContatos().ToViewModel());
+        try
+        {
+            return Ok(_contatoService.GetContatos().ToViewModel());
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex);
+        }
     }
 
-    // GET api/<ContatoController>/5
     [HttpGet("{ddd}")]
     public IActionResult ConsultaPorDDD(int ddd)
     {
-        return Ok(_contatoService.GetContatosPorDDD(ddd)?.ToViewModel());
+        try
+        {
+            return Ok(_contatoService.GetContatosPorDDD(ddd)?.ToViewModel());
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex);
+        }
     }
 
-    // POST api/<ContatoController>
     [HttpPost]
-    public IActionResult PostInserirContato([FromBody] ContatoViewModel contato)
+    public IActionResult PostInserirContato([FromBody] CreateContatoViewModel contato)
     {
-        _contatoService.PostInserirContato(contato.ToModel());
-        return Created("", _contatoService.PostInserirContato(contato.ToModel()).ToViewModel());
+        try
+        {
+            _contatoService.PostInserirContato(contato.ToModel());
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex);
+        }
     }
 
-    // PUT api/<ContatoController>/5
-    [HttpPut("{id}")]
-    public IActionResult PutAlterarContato(int id, [FromBody] ContatoViewModel contato)
+    [HttpPut]
+    public IActionResult PutAlterarContato([FromBody] UpdateContatoViewModel contato)
     {
-        _contatoService.PutAlterarContato(id, contato.ToModel());
-        return NoContent();
+        try
+        {
+            _contatoService.PutAlterarContato(contato.ToModel());
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex);
+        }
     }
 
-    // DELETE api/<ContatoController>/5
     [HttpDelete("{id}")]
     public IActionResult DeleteContato(int id)
     {
-        _contatoService.DeleteContato(id);
+        try
+        {
+            _contatoService.DeleteContato(id);
 
-        return NoContent();
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex);
+        }
     }
 }
-

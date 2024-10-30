@@ -3,9 +3,9 @@
 namespace GestorContatos.Core.Interfaces.Services;
 public interface IContatoService
 {
-    IEnumerable<ContatoModel> GetContatos();
-    ContatoModel? GetContatosPorDDD(int ddd);
-    ContatoModel PostInserirContato(ContatoModel contato);
-    void PutAlterarContato(int id, ContatoModel contato);
+    IEnumerable<Contato> GetContatos();
+    IEnumerable<Contato> GetContatosPorDDD(int ddd);
+    void PostInserirContato(Contato contato);
+    void PutAlterarContato(Contato contato);
     void DeleteContato(int id);
 }

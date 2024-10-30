@@ -5,23 +5,23 @@
 namespace GestorContatos.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class primeiraMigracao : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "RegiaoModel",
+                name: "Regiao",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DDD = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DDD = table.Column<int>(type: "int", nullable: false),
                     Nome = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RegiaoModel", x => x.Id);
+                    table.PrimaryKey("PK_Regiao", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -39,9 +39,9 @@ namespace GestorContatos.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Contatos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Contatos_RegiaoModel_RegiaoId",
+                        name: "FK_Contatos_Regiao_RegiaoId",
                         column: x => x.RegiaoId,
-                        principalTable: "RegiaoModel",
+                        principalTable: "Regiao",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -59,7 +59,7 @@ namespace GestorContatos.Infrastructure.Migrations
                 name: "Contatos");
 
             migrationBuilder.DropTable(
-                name: "RegiaoModel");
+                name: "Regiao");
         }
     }
 }

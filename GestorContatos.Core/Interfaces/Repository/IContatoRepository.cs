@@ -1,11 +1,10 @@
 ﻿using GestorContatos.Core.Entities;
 
 namespace GestorContatos.Core.Interfaces.Repository;
-public interface IContatoRepository
+public interface IContatoRepository : IRepository<Contato>
 {
-    IEnumerable<ContatoModel> GetContatos();
-    ContatoModel? GetContatosPorDDD(int ddd);
-    ContatoModel PostInserirContato(ContatoModel contato);
-    void PutAlterarContato(int id, ContatoModel contato);
-    void DeleteContato(int id);
+    IEnumerable<Contato> GetContatosPorDDD(int ddd);
+
+    IEnumerable<Contato> GetTodosContatosMesclandoComDDD();
+
 }

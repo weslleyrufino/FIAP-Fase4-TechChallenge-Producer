@@ -1,7 +1,7 @@
 ﻿using GestorContatos.Core.Entities.Base;
 
 namespace GestorContatos.Core.Entities;
-public class RegiaoModel : EntityBase
+public class Regiao : EntityBase
 {
-    public string DDD { get; set; }
+    public int DDD { get; set; }
 }

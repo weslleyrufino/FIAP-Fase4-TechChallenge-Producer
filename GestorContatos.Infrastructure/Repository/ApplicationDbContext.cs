@@ -1,5 +1,6 @@
 ﻿using GestorContatos.Core.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace GestorContatos.Infrastructure.Repository;
 public class ApplicationDbContext : DbContext
@@ -8,6 +9,13 @@ public class ApplicationDbContext : DbContext
 
     public ApplicationDbContext()
     {
+        // Para rodar migration preciso comentar o código dentro desse construtor.
+        IConfiguration configuration = new ConfigurationBuilder()
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+        _connectionString = configuration.GetConnectionString("ConnectionString");
     }
 
     public ApplicationDbContext(string connectionString)
@@ -15,7 +23,7 @@ public class ApplicationDbContext : DbContext
         _connectionString = connectionString;
     }
 
-    public DbSet<ContatoModel> Contato { get; set; }
+    public DbSet<Contato> Contato { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

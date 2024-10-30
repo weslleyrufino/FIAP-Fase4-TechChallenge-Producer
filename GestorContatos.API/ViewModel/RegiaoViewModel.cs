@@ -4,5 +4,5 @@ namespace GestorContatos.API.ViewModel;
 
 public class RegiaoViewModel : ViewModelBase
 {
-    public string DDD { get; set; }
+    public int DDD { get; set; }
 }

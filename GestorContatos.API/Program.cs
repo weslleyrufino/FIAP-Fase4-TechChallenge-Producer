@@ -1,7 +1,6 @@
 using GestorContatos.Core.Interfaces.Repository;
 using GestorContatos.Core.Interfaces.Services;
 using GestorContatos.Core.Services;
-using GestorContatos.Infrastructure.Persistence;
 using GestorContatos.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 
