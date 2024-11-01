@@ -3,8 +3,8 @@
 namespace GestorContatos.Core.Entities;
 public class Contato : EntityBase
 {
-    public string Telefone { get; set; }
-    public string Email { get; set; }
-    public int RegiaoId { get; set; }
+    public required string Telefone { get; set; }
+    public required string Email { get; set; }
+    public required int RegiaoId { get; set; }
     public Regiao Regiao { get; set; }
 }

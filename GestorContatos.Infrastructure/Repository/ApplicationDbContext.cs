@@ -28,7 +28,11 @@ public class ApplicationDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
-            optionsBuilder.UseSqlServer(_connectionString);
+        {
+            optionsBuilder
+                .UseSqlServer(_connectionString)
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+        }
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

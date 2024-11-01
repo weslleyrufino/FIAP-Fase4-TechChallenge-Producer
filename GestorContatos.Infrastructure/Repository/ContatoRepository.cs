@@ -4,12 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GestorContatos.Infrastructure.Repository;
 
-public class ContatoRepository : EFRepository<Contato>, IContatoRepository
+public class ContatoRepository(ApplicationDbContext context) : EFRepository<Contato>(context), IContatoRepository
 {
-    public ContatoRepository(ApplicationDbContext context) : base(context)
-    {
-    }
-
     public IEnumerable<Contato> GetContatosPorDDD(int ddd) 
         => _dbSet.Include(contato => contato.Regiao).Where(entity => entity.Regiao.DDD == ddd).ToList();
 
