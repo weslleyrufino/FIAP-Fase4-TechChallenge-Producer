@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using GestorContatos.Application.Validations;
+using System.ComponentModel.DataAnnotations;
 
 namespace GestorContatos.Application.ViewModel;
 
@@ -11,7 +12,7 @@ public class UpdateContatoViewModel
     public string Nome { get; set; }
 
     [Required(ErrorMessage = "O campo Telefone é obrigatório.")]
-    [RegularExpression(@"^\d{8,9}$", ErrorMessage = "Telefone deve conter entre 8 e 9 dígitos.")]
+    [ValidaFormatoNumeroTelefones(ErrorMessage = "Formato de telefone inválido.")]
     public string Telefone { get; set; }
 
     [Required(ErrorMessage = "O campo Email é obrigatório.")]

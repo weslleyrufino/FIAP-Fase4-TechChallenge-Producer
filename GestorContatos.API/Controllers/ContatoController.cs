@@ -24,7 +24,7 @@ public class ContatoController(IContatoService contatoService) : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, $"Erro interno do servidor {ex.Message}");
+            return StatusCode(500, $"Erro interno do servidor. {ex.Message}");
         }
     }
 
@@ -42,7 +42,7 @@ public class ContatoController(IContatoService contatoService) : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, $"Erro interno do servidor {ex.Message}");
+            return StatusCode(500, $"Erro interno do servidor. {ex.Message}");
         }
     }
 
@@ -60,7 +60,7 @@ public class ContatoController(IContatoService contatoService) : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, $"Erro interno do servidor {ex.Message}");
+            return StatusCode(500, $"Erro interno do servidor. {ex.Message}");
         }
     }
 
@@ -80,7 +80,7 @@ public class ContatoController(IContatoService contatoService) : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, $"Erro interno do servidor {ex.Message}");
+            return StatusCode(500, $"Erro interno do servidor. {ex.Message}");
         }
     }
 
@@ -95,7 +95,7 @@ public class ContatoController(IContatoService contatoService) : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, $"Erro interno do servidor {ex.Message}");
+            return StatusCode(500, $"Erro interno do servidor. {ex.Message}");
         }
     }
 }
