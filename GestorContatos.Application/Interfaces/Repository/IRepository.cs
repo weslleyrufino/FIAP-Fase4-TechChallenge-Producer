@@ -1,6 +1,6 @@
 ﻿using GestorContatos.Core.Entities.Base;
 
-namespace GestorContatos.Core.Interfaces.Repository;
+namespace GestorContatos.Application.Interfaces.Repository;
 
 /// <summary>
 /// Interface genérica para CRUD.

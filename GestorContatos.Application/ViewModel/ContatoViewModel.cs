@@ -1,6 +1,6 @@
-﻿using GestorContatos.API.ViewModel.Base;
+﻿using GestorContatos.Application.ViewModel.Base;
 
-namespace GestorContatos.API.ViewModel;
+namespace GestorContatos.Application.ViewModel;
 
 public class ContatoViewModel : ViewModelBase
 {

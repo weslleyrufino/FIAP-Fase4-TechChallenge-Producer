@@ -1,8 +1,8 @@
 ﻿using GestorContatos.Core.Entities;
-using GestorContatos.Core.Interfaces.Repository;
-using GestorContatos.Core.Interfaces.Services;
+using GestorContatos.Application.Interfaces.Repository;
+using GestorContatos.Application.Interfaces.Services;
 
-namespace GestorContatos.Core.Services;
+namespace GestorContatos.Application.Services;
 public class ContatoService(IContatoRepository contatoRepository) : IContatoService
 {
     private readonly IContatoRepository _contatoRepository = contatoRepository;

@@ -1,4 +1,4 @@
-﻿namespace GestorContatos.API.ViewModel.Base;
+﻿namespace GestorContatos.Application.ViewModel.Base;
 
 public class ViewModelBase
 {

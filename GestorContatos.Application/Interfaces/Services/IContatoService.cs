@@ -1,6 +1,6 @@
 ﻿using GestorContatos.Core.Entities;
 
-namespace GestorContatos.Core.Interfaces.Services;
+namespace GestorContatos.Application.Interfaces.Services;
 public interface IContatoService
 {
     IEnumerable<Contato> GetContatos();

@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GestorContatos.Application\GestorContatos.Application.csproj" />
     <ProjectReference Include="..\GestorContatos.Core\GestorContatos.Core.csproj" />
     <ProjectReference Include="..\GestorContatos.Infrastructure\GestorContatos.Infrastructure.csproj" />
   </ItemGroup>

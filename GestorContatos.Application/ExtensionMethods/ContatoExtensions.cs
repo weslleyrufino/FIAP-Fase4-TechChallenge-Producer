@@ -1,7 +1,7 @@
-﻿using GestorContatos.API.ViewModel;
+﻿using GestorContatos.Application.ViewModel;
 using GestorContatos.Core.Entities;
 
-namespace GestorContatos.API.ExtensionMethods;
+namespace GestorContatos.Application.ExtensionMethods;
 
 public static class ContatoExtensions
 {

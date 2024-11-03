@@ -1,6 +1,6 @@
-﻿using GestorContatos.API.ExtensionMethods;
-using GestorContatos.API.ViewModel;
-using GestorContatos.Core.Interfaces.Services;
+﻿using GestorContatos.Application.ExtensionMethods;
+using GestorContatos.Application.Interfaces.Services;
+using GestorContatos.Application.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GestorContatos.API.Controllers;

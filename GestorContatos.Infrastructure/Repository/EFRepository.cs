@@ -1,5 +1,5 @@
 ﻿using GestorContatos.Core.Entities.Base;
-using GestorContatos.Core.Interfaces.Repository;
+using GestorContatos.Application.Interfaces.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace GestorContatos.Infrastructure.Repository;
