@@ -6,96 +6,64 @@ using Microsoft.AspNetCore.Mvc;
 namespace GestorContatos.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class ContatoController(IContatoService contatoService) : ControllerBase
+public class ContatoController(IContatoService contatoService, ILogger<ContatoController> logger) : ControllerBase
 {
     private readonly IContatoService _contatoService = contatoService;
+    private readonly ILogger<ContatoController> _logger = logger;
 
     [HttpGet]
     public IActionResult Get()
     {
-        try
-        {
-            var contatos = _contatoService.GetContatos().ToViewModel();
+        var contatos = _contatoService.GetContatos().ToViewModel();
 
-            if (!contatos.Any())
-                return NoContent();
-
-            return Ok(contatos);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Erro interno do servidor. {ex.Message}");
-        }
+        if (!contatos.Any())
+            return NoContent();
+        
+        return Ok(contatos);
     }
 
     [HttpGet("{ddd:int}")]
     public IActionResult ConsultaPorDDD([FromRoute] int ddd)
     {
-        try
-        {
-            var contatos = _contatoService.GetContatosPorDDD(ddd)?.ToViewModel();
+        var contatos = _contatoService.GetContatosPorDDD(ddd)?.ToViewModel();
 
-            if(contatos == null || !contatos.Any())
-                return NotFound("Nenhum contato encontrado para o DDD especificado.");
+        if (contatos == null || !contatos.Any())
+            return NotFound("Nenhum contato encontrado para o DDD especificado.");
 
-            return Ok(contatos);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Erro interno do servidor. {ex.Message}");
-        }
+        return Ok(contatos);
     }
 
     [HttpPost]
     public IActionResult PostInserirContato([FromBody] CreateContatoViewModel contato)
     {
-        try
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
 
-            _contatoService.PostInserirContato(contato.ToModel());
+        _contatoService.PostInserirContato(contato.ToModel());
 
-            return Created();
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Erro interno do servidor. {ex.Message}");
-        }
+        return Created();
     }
 
     [HttpPut]
     public IActionResult PutAlterarContato([FromBody] UpdateContatoViewModel contato)
     {
-        try
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
 
-            if (_contatoService.ObterPorId(contato.Id) is null)
-                return NotFound("Contato não existe");
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
 
-            _contatoService.PutAlterarContato(contato.ToModel());
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Erro interno do servidor. {ex.Message}");
-        }
+        if (_contatoService.ObterPorId(contato.Id) is null)
+            return NotFound("Contato não existe");
+
+        _contatoService.PutAlterarContato(contato.ToModel());
+        return NoContent();
+
     }
 
     [HttpDelete("{id:int}")]
-    public IActionResult DeleteContato([FromRoute]int id)
+    public IActionResult DeleteContato([FromRoute] int id)
     {
-        try
-        {
-            _contatoService.DeleteContato(id);
+        _contatoService.DeleteContato(id);
 
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Erro interno do servidor. {ex.Message}");
-        }
+        return NoContent();
     }
 }
