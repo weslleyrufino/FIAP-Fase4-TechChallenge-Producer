@@ -14,24 +14,25 @@ Tecnologias utilizadas:
   - Bogus
   - Moq
 
-Nessa segunda fase será criado:
+## Nessa segunda fase será criado:
 
 CI Pipeline:
-● Build: compilar o projeto para garantir que não há erros de compilação.
-● Testes Unitários: executar testes unitários para garantir que as 
+
+- Build: compilar o projeto para garantir que não há erros de compilação.
+- Testes Unitários: executar testes unitários para garantir que as 
 funcionalidades estão trabalhando conforme o esperado.
-● Testes de Integração: executar testes de integração para validar o 
+- Testes de Integração: executar testes de integração para validar o 
 funcionamento correto entre os componentes do sistema, como o banco 
 de dados e a aplicação.
 
 Prometheus:
-● Integrar Prometheus ao aplicativo para coletar métricas como latência das 
+- Integrar Prometheus ao aplicativo para coletar métricas como latência das 
 requisições, uso de CPU e memória.
-● Configurar os endpoints de métricas no aplicativo.
+- Configurar os endpoints de métricas no aplicativo.
 
 Grafana:
-● Configurar um dashboard em Grafana para visualizar as métricas 
+- Configurar um dashboard em Grafana para visualizar as métricas 
 coletadas pelo Prometheus.
-● Criar painéis para exibir métricas específicas como latência por endpoint, 
+- Criar painéis para exibir métricas específicas como latência por endpoint, 
 contagem de requisições por status de resposta, uso de recursos do 
 sistema etc.
