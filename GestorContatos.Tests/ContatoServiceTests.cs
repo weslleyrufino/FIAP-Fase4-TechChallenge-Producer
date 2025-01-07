@@ -28,6 +28,7 @@ public class ContatoServiceTests
     }
 
     [Fact(DisplayName = "Retornar Lista de Contatos")]
+    [Trait("Category", "Unit")]
     [Trait("Contatos", "ContatoService")]
     public void GetContatos_DeveRetornarListaDeContatos()
     {
@@ -45,6 +46,7 @@ public class ContatoServiceTests
     }
 
     [Fact(DisplayName = "Retornar Contatos com DDD")]
+    [Trait("Category", "Unit")]
     [Trait("Contatos", "ContatoService")]
     public void GetContatosPorDDD_DeveRetornarContatosComDddEspecifico()
     {
@@ -64,6 +66,7 @@ public class ContatoServiceTests
     }
 
     [Fact(DisplayName = "Retornar Contato Específico")]
+    [Trait("Category", "Unit")]
     [Trait("Contatos", "ContatoService")]
     public void ObterPorId_DeveRetornarContatoComIdEspecifico()
     {
@@ -81,6 +84,7 @@ public class ContatoServiceTests
     }
 
     [Fact(DisplayName = "Chama Cadastrar")]
+    [Trait("Category", "Unit")]
     [Trait("Contatos", "ContatoService")]
     public void PostInserirContato_DeveChamarCadastrar()
     {
@@ -95,6 +99,7 @@ public class ContatoServiceTests
     }
 
     [Fact(DisplayName = "Chama Alterar")]
+    [Trait("Category", "Unit")]
     [Trait("Contatos", "ContatoService")]
     public void PutAlterarContato_DeveChamarAlterar()
     {
@@ -109,6 +114,7 @@ public class ContatoServiceTests
     }
 
     [Fact(DisplayName = "Chama Deletar")]
+    [Trait("Category", "Unit")]
     [Trait("Contatos", "ContatoService")]
     public void DeleteContato_DeveChamarDeletar()
     {
