@@ -5,8 +5,15 @@ using GestorContatos.Application.Services;
 using GestorContatos.Infrastructure.Repository;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using Prometheus;
+using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var httpDuration = Metrics.CreateHistogram("http_request_duration_seconds_sum", "Histogram of HTTP request durations.", new HistogramConfiguration
+{
+    LabelNames = new[] { "method", "endpoint" }
+});
 
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
@@ -37,6 +44,60 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 var app = builder.Build();
 
+// Registra métricas de uso de CPU e memória
+var cpuUsage = Metrics.CreateGauge("system_cpu_usage_percent", "Current CPU usage percentage.");
+var memoryUsage = Metrics.CreateGauge("system_memory_usage_bytes", "Current memory usage in bytes.");
+
+// Variáveis para cálculo do uso de CPU
+var lastTotalProcessorTime = TimeSpan.Zero;
+var lastTime = DateTime.UtcNow;
+
+
+// Middleware para coletar métricas de uso de CPU e memória
+app.Use(async (context, next) =>
+{
+    var process = Process.GetCurrentProcess();
+
+    // Cálculo do uso de CPU (percentual)
+    var currentTime = DateTime.UtcNow;
+    var currentTotalProcessorTime = process.TotalProcessorTime;
+
+    var elapsedTime = (currentTime - lastTime).TotalMilliseconds;
+    var cpuElapsedTime = (currentTotalProcessorTime - lastTotalProcessorTime).TotalMilliseconds;
+
+    var cpuPercent = elapsedTime > 0 ? (cpuElapsedTime / elapsedTime) * 100 / Environment.ProcessorCount : 0;
+
+    // Atualiza valores para o próximo cálculo
+    lastTime = currentTime;
+    lastTotalProcessorTime = currentTotalProcessorTime;
+
+    // Define a métrica de CPU
+    cpuUsage.Set(cpuPercent);
+
+    // Cálculo do uso de memória (percentual)
+    var totalMemory = GC.GetGCMemoryInfo().TotalAvailableMemoryBytes; // Total de memória disponível para o processo
+    var usedMemory = process.PrivateMemorySize64; // Memória usada pelo processo
+
+    var memoryPercent = totalMemory > 0 ? (usedMemory / (double)totalMemory) * 100 : 0;
+
+    // Define a métrica de memória
+    memoryUsage.Set(memoryPercent);
+
+    await next();
+});
+
+
+// Middleware para medir latência das requisições
+app.Use(async (context, next) =>
+{
+    var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+    await next();
+    stopwatch.Stop();
+    httpDuration
+        .WithLabels(context.Request.Method, context.Request.Path)
+        .Observe(stopwatch.Elapsed.TotalSeconds);
+});
+
 // Middleware de tratamento de exceções
 app.UseExceptionHandler(errorApp =>
 {
@@ -66,9 +127,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseHttpMetrics();
+
+app.MapMetrics();
 
 app.MapControllers();
 
