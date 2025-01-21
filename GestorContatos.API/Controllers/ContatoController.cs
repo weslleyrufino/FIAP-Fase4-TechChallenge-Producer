@@ -25,7 +25,6 @@ public class ContatoController(IContatoService contatoService, ILogger<ContatoCo
     [HttpGet("{ddd:int}")]
     public IActionResult ConsultaPorDDD([FromRoute] int ddd)
     {
-        var test = "abc";
         var contatos = _contatoService.GetContatosPorDDD(ddd)?.ToViewModel();
 
         if (contatos == null || !contatos.Any())
