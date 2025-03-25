@@ -1,6 +1,9 @@
 ﻿using GestorContatos.Core.Entities;
 using GestorContatos.Application.Interfaces.Repository;
 using GestorContatos.Application.Interfaces.Services;
+using RabbitMQ.Client;
+using System.Text.Json;
+using System.Text;
 
 namespace GestorContatos.Application.Services;
 public class ContatoService(IContatoRepository contatoRepository) : IContatoService
@@ -9,7 +12,27 @@ public class ContatoService(IContatoRepository contatoRepository) : IContatoServ
 
     public void DeleteContato(int id)
     {
-        _contatoRepository.Deletar(id);
+        var factory = new ConnectionFactory() { HostName = "localhost", UserName = "guest", Password = "guest" };
+        using var connection = factory.CreateConnection();
+        using (var channel = connection.CreateModel())
+        {
+            channel.QueueDeclare(
+                queue: "deletar_contato",
+                durable: false,
+                exclusive: false,
+                autoDelete: false,
+                arguments: null);
+
+            string message = JsonSerializer
+                .Serialize(id);
+            var body = Encoding.UTF8.GetBytes(message);
+
+            channel.BasicPublish(
+                exchange: "",
+                routingKey: "deletar_contato",
+                basicProperties: null,
+                body: body);
+        }
     }
 
     public IEnumerable<Contato> GetContatos() 
@@ -23,12 +46,67 @@ public class ContatoService(IContatoRepository contatoRepository) : IContatoServ
 
     public void PostInserirContato(Contato contato)
     {
-        _contatoRepository.Cadastrar(contato);
+        var factory = new ConnectionFactory() { HostName = "localhost", UserName = "guest", Password = "guest" };
+        using var connection = factory.CreateConnection();
+        using (var channel = connection.CreateModel())
+        {
+            channel.QueueDeclare(
+                queue: "inserir_contato",
+                durable: false,
+                exclusive: false,
+                autoDelete: false,
+                arguments: null);
+            
+            string message = JsonSerializer
+                .Serialize(
+                new Contato(){
+                    Id = contato.Id, 
+                    Nome = contato.Nome, 
+                    Telefone = contato.Telefone, 
+                    Email = contato.Email, 
+                    RegiaoId = contato.RegiaoId 
+                });
+            var body = Encoding.UTF8.GetBytes(message);
+
+            channel.BasicPublish(
+                exchange: "",
+                routingKey: "inserir_contato",
+                basicProperties: null,
+                body: body);
+        }
     }
 
     public void PutAlterarContato(Contato contato)
     {
-        _contatoRepository.Alterar(contato);
+        var factory = new ConnectionFactory() { HostName = "localhost", UserName = "guest", Password = "guest" };
+        using var connection = factory.CreateConnection();
+        using (var channel = connection.CreateModel())
+        {
+            channel.QueueDeclare(
+                queue: "alterar_contato",
+                durable: false,
+                exclusive: false,
+                autoDelete: false,
+                arguments: null);
+
+            string message = JsonSerializer
+                .Serialize(
+                new Contato()
+                {
+                    Id = contato.Id,
+                    Nome = contato.Nome,
+                    Telefone = contato.Telefone,
+                    Email = contato.Email,
+                    RegiaoId = contato.RegiaoId
+                });
+            var body = Encoding.UTF8.GetBytes(message);
+
+            channel.BasicPublish(
+                exchange: "",
+                routingKey: "alterar_contato",
+                basicProperties: null,
+                body: body);
+        }
     }
 
 }

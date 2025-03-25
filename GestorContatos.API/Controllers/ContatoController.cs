@@ -51,6 +51,7 @@ public class ContatoController(IContatoService contatoService, ILogger<ContatoCo
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
+        // Aqui não deverá mais obter direto da base de dados. Deverá obter pelo azure function.
         if (_contatoService.ObterPorId(contato.Id) is null)
             return NotFound("Contato não existe");
 
