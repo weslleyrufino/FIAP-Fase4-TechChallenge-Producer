@@ -3,6 +3,7 @@ using GestorContatos.Application.Interfaces.Repository;
 using GestorContatos.Application.Interfaces.Services;
 using GestorContatos.Application.Services;
 using GestorContatos.Infrastructure.Repository;
+using MassTransit;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Prometheus;
@@ -28,6 +29,27 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+var configurationMassTransit = builder.Configuration;
+var fila = configurationMassTransit.GetSection("MassTransit")["NomeFila"] ?? string.Empty;
+var servidor = configurationMassTransit.GetSection("MassTransit")["Servidor"] ?? string.Empty;
+var usuario = configurationMassTransit.GetSection("MassTransit")["Usuario"] ?? string.Empty;
+var senha = configurationMassTransit.GetSection("MassTransit")["Senha"] ?? string.Empty;
+
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(servidor, "/", h =>
+        {
+            h.Username(usuario);
+            h.Password(senha);
+        });
+
+        cfg.ConfigureEndpoints(context);
+    });
+});
 
 // LOG
 builder.Logging.ClearProviders();

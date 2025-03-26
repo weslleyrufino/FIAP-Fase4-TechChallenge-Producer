@@ -1,15 +1,20 @@
 ﻿using GestorContatos.Application.ExtensionMethods;
 using GestorContatos.Application.Interfaces.Services;
 using GestorContatos.Application.ViewModel;
+using GestorContatos.Core.Entities;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GestorContatos.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class ContatoController(IContatoService contatoService, ILogger<ContatoController> logger) : ControllerBase
+public class ContatoController(IContatoService contatoService, ILogger<ContatoController> logger, IBus bus, IConfiguration configuration) : ControllerBase
 {
     private readonly IContatoService _contatoService = contatoService;
     private readonly ILogger<ContatoController> _logger = logger;
+    private readonly IBus _bus = bus;
+    private readonly IConfiguration _configuration = configuration;
+
 
     [HttpGet]
     public IActionResult Get()
@@ -18,7 +23,7 @@ public class ContatoController(IContatoService contatoService, ILogger<ContatoCo
 
         if (!contatos.Any())
             return NoContent();
-        
+
         return Ok(contatos);
     }
 
@@ -34,18 +39,26 @@ public class ContatoController(IContatoService contatoService, ILogger<ContatoCo
     }
 
     [HttpPost]
-    public IActionResult PostInserirContato([FromBody] CreateContatoViewModel contato)
+    public async Task<IActionResult> PostInserirContato([FromBody] CreateContatoViewModel contato)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        _contatoService.PostInserirContato(contato.ToModel());
+        var nomeFila = _configuration
+            .GetSection("MassTransit_InserirContato")["NomeFila"] ?? string.Empty;
+
+        var endpoint = await _bus
+            .GetSendEndpoint(new Uri($"queue:{nomeFila}"));
+
+        await endpoint.Send(contato.ToModel());
+
+        //_contatoService.PostInserirContato(contato.ToModel());
 
         return Created();
     }
 
     [HttpPut]
-    public IActionResult PutAlterarContato([FromBody] UpdateContatoViewModel contato)
+    public async Task<IActionResult> PutAlterarContato([FromBody] UpdateContatoViewModel contato)
     {
 
         if (!ModelState.IsValid)
@@ -55,15 +68,31 @@ public class ContatoController(IContatoService contatoService, ILogger<ContatoCo
         if (_contatoService.ObterPorId(contato.Id) is null)
             return NotFound("Contato não existe");
 
-        _contatoService.PutAlterarContato(contato.ToModel());
+        var nomeFila = _configuration
+            .GetSection("MassTransit_AlterarContato")["NomeFila"] ?? string.Empty;
+
+        var endpoint = await _bus
+            .GetSendEndpoint(new Uri($"queue:{nomeFila}"));
+
+        await endpoint.Send(contato.ToModel());
+
+        //_contatoService.PutAlterarContato(contato.ToModel());
         return NoContent();
 
     }
 
     [HttpDelete("{id:int}")]
-    public IActionResult DeleteContato([FromRoute] int id)
+    public async Task<IActionResult> DeleteContato([FromRoute] int id)
     {
-        _contatoService.DeleteContato(id);
+        var nomeFila = _configuration
+            .GetSection("MassTransit_DeletarContato")["NomeFila"] ?? string.Empty;
+
+        var endpoint = await _bus
+            .GetSendEndpoint(new Uri($"queue:{nomeFila}"));
+
+        await endpoint.Send(id);// não funcinou mandar o id.
+
+        //_contatoService.DeleteContato(id);
 
         return NoContent();
     }
