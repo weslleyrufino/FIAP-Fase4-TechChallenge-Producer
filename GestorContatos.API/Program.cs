@@ -41,7 +41,7 @@ builder.Services.AddMassTransit(x =>
 {
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host(servidor, "/", h =>
+        cfg.Host(new Uri("rabbitmq://rabbitmq:5672"), h =>
         {
             h.Username(usuario);
             h.Password(senha);
@@ -66,21 +66,21 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 var app = builder.Build();
 
-// Registra métricas de uso de CPU e memória
+// Registra mï¿½tricas de uso de CPU e memï¿½ria
 var cpuUsage = Metrics.CreateGauge("system_cpu_usage_percent", "Current CPU usage percentage.");
 var memoryUsage = Metrics.CreateGauge("system_memory_usage_bytes", "Current memory usage in bytes.");
 
-// Variáveis para cálculo do uso de CPU
+// Variï¿½veis para cï¿½lculo do uso de CPU
 var lastTotalProcessorTime = TimeSpan.Zero;
 var lastTime = DateTime.UtcNow;
 
 
-// Middleware para coletar métricas de uso de CPU e memória
+// Middleware para coletar mï¿½tricas de uso de CPU e memï¿½ria
 app.Use(async (context, next) =>
 {
     var process = Process.GetCurrentProcess();
 
-    // Cálculo do uso de CPU (percentual)
+    // Cï¿½lculo do uso de CPU (percentual)
     var currentTime = DateTime.UtcNow;
     var currentTotalProcessorTime = process.TotalProcessorTime;
 
@@ -89,27 +89,27 @@ app.Use(async (context, next) =>
 
     var cpuPercent = elapsedTime > 0 ? (cpuElapsedTime / elapsedTime) * 100 / Environment.ProcessorCount : 0;
 
-    // Atualiza valores para o próximo cálculo
+    // Atualiza valores para o prï¿½ximo cï¿½lculo
     lastTime = currentTime;
     lastTotalProcessorTime = currentTotalProcessorTime;
 
-    // Define a métrica de CPU
+    // Define a mï¿½trica de CPU
     cpuUsage.Set(cpuPercent);
 
-    // Cálculo do uso de memória (percentual)
-    var totalMemory = GC.GetGCMemoryInfo().TotalAvailableMemoryBytes; // Total de memória disponível para o processo
-    var usedMemory = process.PrivateMemorySize64; // Memória usada pelo processo
+    // Cï¿½lculo do uso de memï¿½ria (percentual)
+    var totalMemory = GC.GetGCMemoryInfo().TotalAvailableMemoryBytes; // Total de memï¿½ria disponï¿½vel para o processo
+    var usedMemory = process.PrivateMemorySize64; // Memï¿½ria usada pelo processo
 
     var memoryPercent = totalMemory > 0 ? (usedMemory / (double)totalMemory) * 100 : 0;
 
-    // Define a métrica de memória
+    // Define a mï¿½trica de memï¿½ria
     memoryUsage.Set(memoryPercent);
 
     await next();
 });
 
 
-// Middleware para medir latência das requisições
+// Middleware para medir latï¿½ncia das requisiï¿½ï¿½es
 app.Use(async (context, next) =>
 {
     var stopwatch = System.Diagnostics.Stopwatch.StartNew();
@@ -120,7 +120,7 @@ app.Use(async (context, next) =>
         .Observe(stopwatch.Elapsed.TotalSeconds);
 });
 
-// Middleware de tratamento de exceções
+// Middleware de tratamento de exceï¿½ï¿½es
 app.UseExceptionHandler(errorApp =>
 {
     errorApp.Run(async context =>
@@ -133,21 +133,24 @@ app.UseExceptionHandler(errorApp =>
 
         if (exceptionHandlerPathFeature?.Error != null)
         {
-            logger.LogError(exceptionHandlerPathFeature.Error, "Erro não tratado.");
+            logger.LogError(exceptionHandlerPathFeature.Error, "Erro nï¿½o tratado.");
         }
 
         await context.Response.WriteAsync("{\"error\":\"Erro interno do servidor.\"}");
     });
 });
 
-// Middleware padrão
+// Middleware padrï¿½o
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// if (app.Environment.IsDevelopment())
+// {
+//     app.UseSwagger();
+//     app.UseSwaggerUI();
+// }
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 //app.UseHttpsRedirection();
 
